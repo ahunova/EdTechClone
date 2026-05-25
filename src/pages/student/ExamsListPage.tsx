@@ -3,11 +3,11 @@ import { useNavigate } from 'react-router-dom';
 import AppLayout from '@/components/layouts/AppLayout';
 import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/db/supabase';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
-import { ClipboardList, ArrowRight, Clock, Play, Trophy } from 'lucide-react';
+import { ClipboardList, Clock, Play, Trophy } from 'lucide-react';
 import type { Quiz, ExamAttempt } from '@/types/types';
 
 interface QuizWithSubject extends Quiz {

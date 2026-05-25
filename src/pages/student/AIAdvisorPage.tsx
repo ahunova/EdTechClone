@@ -7,7 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
-import { BrainCircuit, BookOpen, TrendingUp, Target, Lightbulb, ArrowRight, Zap, AlertTriangle } from 'lucide-react';
+import { BrainCircuit, BookOpen, TrendingUp, Target, Lightbulb, Zap, AlertTriangle } from 'lucide-react';
 import type { ExamAttempt } from '@/types/types';
 
 interface AttemptWithQuiz extends ExamAttempt {

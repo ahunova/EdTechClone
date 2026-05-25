@@ -4,7 +4,6 @@ import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
-import { Badge } from '@/components/ui/badge';
 import {
   LayoutDashboard, BookOpen, Play, ClipboardList, BarChart3,
   User, BrainCircuit, Settings, LogOut, Menu, GraduationCap,

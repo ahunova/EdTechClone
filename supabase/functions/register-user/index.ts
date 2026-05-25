@@ -1,3 +1,4 @@
+// @ts-nocheck — Deno Edge Function, type-checked by Deno runtime, not tsc
 import { createClient } from 'npm:@supabase/supabase-js@2';
 
 const corsHeaders = {

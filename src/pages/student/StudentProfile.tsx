@@ -23,7 +23,7 @@ interface AttemptWithQuiz extends ExamAttempt {
 }
 
 export default function StudentProfile() {
-  const { profile, refreshProfile } = useAuth();
+  const { profile } = useAuth();
   const navigate = useNavigate();
   const [attendance, setAttendance] = useState<AttendanceWithSubject[]>([]);
   const [attempts, setAttempts] = useState<AttemptWithQuiz[]>([]);

@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import AppLayout from '@/components/layouts/AppLayout';
 import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/db/supabase';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -11,7 +11,7 @@ import { Badge } from '@/components/ui/badge';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
 import { Skeleton } from '@/components/ui/skeleton';
-import { Plus, Pencil, Trash2, BookMarked, Loader2, Play, Youtube, Clock, GripVertical } from 'lucide-react';
+import { Plus, Pencil, Trash2, BookMarked, Loader2, Play, Video, Clock, GripVertical } from 'lucide-react';
 import { toast } from 'sonner';
 import type { Subject, VideoLesson } from '@/types/types';
 
@@ -157,7 +157,7 @@ function VideoLessonsDialog({ subject }: VideoLessonsDialogProps) {
               </div>
             ) : lessons.length === 0 ? (
               <div className="text-center py-10 border-2 border-dashed border-border rounded-lg">
-                <Youtube className="w-10 h-10 text-muted-foreground/30 mx-auto mb-2" />
+                <Video className="w-10 h-10 text-muted-foreground/30 mx-auto mb-2" />
                 <p className="text-sm text-muted-foreground">Hali dars qo'shilmagan</p>
                 <Button variant="outline" size="sm" className="mt-3" onClick={openAdd}>
                   <Plus className="w-4 h-4 mr-1.5" />
@@ -267,7 +267,7 @@ function VideoLessonsDialog({ subject }: VideoLessonsDialogProps) {
               />
               {form.video_url && isYoutubeUrl(form.video_url) && (
                 <div className="flex items-center gap-1.5 text-xs text-success">
-                  <Youtube className="w-3.5 h-3.5" />
+                  <Video className="w-3.5 h-3.5" />
                   YouTube havolasi aniqlandi
                   {getYoutubeId(form.video_url) && (
                     <img
