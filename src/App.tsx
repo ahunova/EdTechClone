@@ -1,0 +1,34 @@
+import React from 'react';
+import { HashRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import IntersectObserver from '@/components/common/IntersectObserver';
+import { Toaster } from '@/components/ui/sonner';
+import { AuthProvider } from '@/contexts/AuthContext';
+import { RouteGuard } from '@/components/common/RouteGuard';
+import { routes } from './routes';
+
+const App: React.FC = () => {
+  // eslint-disable-next-line no-console
+  console.log("[App] rendering");
+  return (
+    <Router>
+      <AuthProvider>
+        <RouteGuard>
+          <IntersectObserver />
+          <Routes>
+            {routes.map((route, index) => (
+              <Route
+                key={index}
+                path={route.path}
+                element={route.element}
+              />
+            ))}
+            <Route path="*" element={<Navigate to="/login" replace />} />
+          </Routes>
+          <Toaster richColors position="top-right" />
+        </RouteGuard>
+      </AuthProvider>
+    </Router>
+  );
+};
+
+export default App;
