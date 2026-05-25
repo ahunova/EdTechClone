@@ -39,19 +39,12 @@ const navItems: NavItem[] = [
   { label: 'Sozlamalar', path: '/admin/settings', icon: Settings, roles: ['admin'] },
 ];
 
-function SidebarContent({ onNavigate }: { onNavigate?: () => void }) {
-  const { profile, signOut } = useAuth();
+function SidebarContent({ onNavigate, onSignOut }: { onNavigate?: () => void; onSignOut: () => void }) {
+  const { profile } = useAuth();
   const location = useLocation();
-  const navigate = useNavigate();
 
   const role = profile?.role ?? 'student';
   const filteredItems = navItems.filter((item) => item.roles.includes(role));
-
-  const handleSignOut = async () => {
-    await signOut();
-    toast.success('Tizimdan chiqildi');
-    navigate('/login');
-  };
 
   const roleBadgeMap: Record<string, { label: string; className: string }> = {
     student: { label: "O'quvchi", className: 'bg-primary/20 text-primary' },
@@ -126,7 +119,7 @@ function SidebarContent({ onNavigate }: { onNavigate?: () => void }) {
       <div className="p-3 border-t border-sidebar-border">
         <Button
           variant="ghost"
-          onClick={handleSignOut}
+          onClick={onSignOut}
           className="w-full justify-start gap-3 text-sidebar-foreground/70 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
         >
           <LogOut className="w-4 h-4" />
@@ -136,6 +129,7 @@ function SidebarContent({ onNavigate }: { onNavigate?: () => void }) {
     </div>
   );
 }
+
 
 interface AppLayoutProps {
   children: React.ReactNode;
@@ -156,7 +150,7 @@ export default function AppLayout({ children }: AppLayoutProps) {
     <div className="flex min-h-screen w-full bg-background">
       {/* Desktop sidebar */}
       <aside className="hidden lg:flex flex-col w-64 shrink-0 border-r border-sidebar-border">
-        <SidebarContent />
+        <SidebarContent onSignOut={handleSignOut} />
       </aside>
 
       {/* Main content */}
@@ -171,7 +165,7 @@ export default function AppLayout({ children }: AppLayoutProps) {
               </Button>
             </SheetTrigger>
             <SheetContent side="left" className="p-0 w-64 bg-sidebar">
-              <SidebarContent onNavigate={() => setMobileOpen(false)} />
+              <SidebarContent onNavigate={() => setMobileOpen(false)} onSignOut={handleSignOut} />
             </SheetContent>
           </Sheet>
           <div className="flex items-center gap-2 flex-1 min-w-0">

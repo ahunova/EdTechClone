@@ -10,14 +10,18 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { CheckCircle, XCircle, Trophy, Clock, ArrowRight, RotateCcw } from 'lucide-react';
 import type { ExamAttempt, ExamAnswer, Question } from '@/types/types';
 
+interface AttemptWithQuiz extends ExamAttempt {
+  quizzes?: { title: string; duration_minutes: number };
+}
+
 interface AnswerWithQuestion extends ExamAnswer {
-  question?: Question;
+  questions?: Question;
 }
 
 export default function ResultPage() {
   const { attemptId } = useParams<{ attemptId: string }>();
   const navigate = useNavigate();
-  const [attempt, setAttempt] = useState<ExamAttempt | null>(null);
+  const [attempt, setAttempt] = useState<AttemptWithQuiz | null>(null);
   const [answers, setAnswers] = useState<AnswerWithQuestion[]>([]);
   const [loading, setLoading] = useState(true);
   const [showReview, setShowReview] = useState(false);
@@ -81,7 +85,7 @@ export default function ResultPage() {
             <Trophy className="w-12 h-12 mx-auto mb-3 opacity-90" />
             <h1 className="text-2xl font-bold text-balance">Natijalar</h1>
             <p className="text-primary-foreground/80 text-sm mt-1 text-pretty">
-              {(attempt as any)?.quizzes?.title ?? 'Imtihon'}
+              {attempt?.quizzes?.title ?? 'Imtihon'}
             </p>
           </div>
           <div className="-mt-6 mx-4 mb-4">
@@ -144,7 +148,7 @@ export default function ResultPage() {
           <div className="space-y-3 animate-fade-in">
             <h2 className="text-base font-semibold text-foreground">Javoblar tahlili</h2>
             {answers.map((ans, idx) => {
-              const q = (ans as any).questions as Question;
+              const q = ans.questions;
               if (!q) return null;
               const correct = ans.is_correct;
               const optKeys: ('A' | 'B' | 'C' | 'D')[] = ['A', 'B', 'C', 'D'];

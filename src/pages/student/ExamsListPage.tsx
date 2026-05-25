@@ -10,10 +10,14 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { ClipboardList, ArrowRight, Clock, Play, Trophy } from 'lucide-react';
 import type { Quiz, ExamAttempt } from '@/types/types';
 
+interface QuizWithSubject extends Quiz {
+  subjects?: { name: string };
+}
+
 export default function ExamsListPage() {
   const { profile } = useAuth();
   const navigate = useNavigate();
-  const [quizzes, setQuizzes] = useState<Quiz[]>([]);
+  const [quizzes, setQuizzes] = useState<QuizWithSubject[]>([]);
   const [attempts, setAttempts] = useState<ExamAttempt[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -64,7 +68,7 @@ export default function ExamsListPage() {
                     <div className="flex items-start justify-between gap-3 mb-3">
                       <div className="flex-1 min-w-0">
                         <h3 className="font-semibold text-foreground text-balance">{quiz.title}</h3>
-                        <p className="text-xs text-muted-foreground mt-0.5">{(quiz as any).subjects?.name}</p>
+                        <p className="text-xs text-muted-foreground mt-0.5">{quiz.subjects?.name}</p>
                       </div>
                       {pct !== null && (
                         <Badge variant={pct >= 55 ? 'default' : 'destructive'} className="shrink-0">
@@ -90,7 +94,7 @@ export default function ExamsListPage() {
                       <Button
                         className="w-full h-9"
                         variant={attempt ? 'outline' : 'default'}
-                        onClick={() => navigate(attempt ? `/exams/result/${(attempts.find(a => a.quiz_id === quiz.id) as any)?.id ?? ''}` : `/exams/${quiz.id}`)}
+                        onClick={() => navigate(attempt ? `/exams/result/${attempt.id}` : `/exams/${quiz.id}`)}
                       >
                         {attempt ? (
                           <><Trophy className="w-4 h-4 mr-2" />Natijani ko'rish</>

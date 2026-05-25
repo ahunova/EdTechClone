@@ -31,17 +31,9 @@ export function RouteGuard({ children }: RouteGuardProps) {
   const location = useLocation();
 
   useEffect(() => {
-    // eslint-disable-next-line no-console
-    console.log("[RouteGuard] location:", location.pathname, "loading:", loading, "user:", !!user);
     if (loading) return;
-
     const isPublic = matchPublicRoute(location.pathname, PUBLIC_ROUTES);
-    // eslint-disable-next-line no-console
-    console.log("[RouteGuard] isPublic:", isPublic);
-
     if (!user && !isPublic) {
-      // eslint-disable-next-line no-console
-      console.log("[RouteGuard] redirecting to /login");
       navigate('/login', { state: { from: location.pathname }, replace: true });
     }
   }, [user, loading, location.pathname, navigate]);

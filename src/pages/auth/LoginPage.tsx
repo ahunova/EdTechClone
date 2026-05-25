@@ -29,9 +29,6 @@ export default function LoginPage() {
     }
   }, [profile, navigate]);
 
-  // eslint-disable-next-line no-console
-  console.log("[LoginPage] mounted");
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!agreed) {

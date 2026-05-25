@@ -12,7 +12,7 @@ import {
   LineChart, Line, Legend
 } from 'recharts';
 import { BarChart3, Users, Trophy, AlertTriangle, TrendingDown } from 'lucide-react';
-import type { Quiz, Question } from '@/types/types';
+import type { Quiz } from '@/types/types';
 
 interface QuizStat {
   quiz_id: string;
@@ -28,6 +28,23 @@ interface QuestionStat {
   correct_count: number;
   total_answers: number;
   error_rate: number;
+}
+
+interface AttemptRow {
+  id: string;
+  quiz_id: string;
+  student_id: string;
+  score: number | null;
+  total_questions: number;
+  submitted_at: string | null;
+  quizzes?: { title: string };
+  profiles?: { full_name: string; username: string };
+}
+
+interface AnswerRow {
+  question_id: string;
+  is_correct: boolean | null;
+  questions?: { question_text: string };
 }
 
 interface StudentRow {
@@ -78,13 +95,13 @@ export default function AnalyticsDashboard() {
         .in('quiz_id', targetIds)
         .not('submitted_at', 'is', null);
 
-      const attList = Array.isArray(attempts) ? attempts : [];
+      const attList: AttemptRow[] = Array.isArray(attempts) ? attempts : [];
 
       // Build quiz stats
       const byQuiz: Record<string, { title: string; scores: number[]; pass: number }> = {};
-      attList.forEach((a: any) => {
+      attList.forEach((a) => {
         if (!byQuiz[a.quiz_id]) byQuiz[a.quiz_id] = { title: a.quizzes?.title ?? 'Test', scores: [], pass: 0 };
-        const pct = a.total_questions > 0 ? (a.score / a.total_questions) * 100 : 0;
+        const pct = a.total_questions > 0 ? ((a.score ?? 0) / a.total_questions) * 100 : 0;
         byQuiz[a.quiz_id].scores.push(pct);
         if (pct >= 55) byQuiz[a.quiz_id].pass++;
       });
@@ -99,12 +116,12 @@ export default function AnalyticsDashboard() {
       setQuizStats(qStats);
 
       // Build student rows
-      const rows: StudentRow[] = attList.map((a: any) => ({
+      const rows: StudentRow[] = attList.map((a) => ({
         student_id: a.student_id,
-        full_name: a.profiles?.full_name || a.profiles?.username || 'Noma\'lum',
+        full_name: a.profiles?.full_name || a.profiles?.username || "Noma'lum",
         score: a.score ?? 0,
         total: a.total_questions ?? 0,
-        pct: a.total_questions > 0 ? Math.round((a.score / a.total_questions) * 100) : 0,
+        pct: a.total_questions > 0 ? Math.round(((a.score ?? 0) / a.total_questions) * 100) : 0,
         date: a.submitted_at ? new Date(a.submitted_at).toLocaleDateString('uz-UZ') : '—',
       }));
       setStudentRows(rows.sort((a, b) => b.pct - a.pct));
@@ -119,7 +136,7 @@ export default function AnalyticsDashboard() {
           );
 
         const byQ: Record<string, { text: string; correct: number; total: number }> = {};
-        (Array.isArray(qAnswers) ? qAnswers : []).forEach((ans: any) => {
+        (Array.isArray(qAnswers) ? (qAnswers as unknown as AnswerRow[]) : []).forEach((ans) => {
           const qid = ans.question_id;
           if (!byQ[qid]) byQ[qid] = { text: ans.questions?.question_text ?? 'Savol', correct: 0, total: 0 };
           byQ[qid].total++;

@@ -7,8 +7,6 @@ import { RouteGuard } from '@/components/common/RouteGuard';
 import { routes } from './routes';
 
 const App: React.FC = () => {
-  // eslint-disable-next-line no-console
-  console.log("[App] rendering");
   return (
     <Router>
       <AuthProvider>

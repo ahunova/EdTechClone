@@ -10,6 +10,10 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { BrainCircuit, BookOpen, TrendingUp, Target, Lightbulb, ArrowRight, Zap, AlertTriangle } from 'lucide-react';
 import type { ExamAttempt } from '@/types/types';
 
+interface AttemptWithQuiz extends ExamAttempt {
+  quizzes?: { title: string; subjects?: { name: string } };
+}
+
 interface Recommendation {
   type: 'improve' | 'strength' | 'tip' | 'warning';
   title: string;
@@ -21,7 +25,7 @@ interface Recommendation {
 export default function AIAdvisorPage() {
   const { profile } = useAuth();
   const navigate = useNavigate();
-  const [attempts, setAttempts] = useState<ExamAttempt[]>([]);
+  const [attempts, setAttempts] = useState<AttemptWithQuiz[]>([]);
   const [loading, setLoading] = useState(true);
   const [recommendations, setRecommendations] = useState<Recommendation[]>([]);
 
@@ -45,7 +49,7 @@ export default function AIAdvisorPage() {
     fetchData();
   }, [profile?.id]);
 
-  const generateRecommendations = (list: ExamAttempt[]) => {
+  const generateRecommendations = (list: AttemptWithQuiz[]) => {
     const recs: Recommendation[] = [];
 
     if (list.length === 0) {
@@ -111,7 +115,7 @@ export default function AIAdvisorPage() {
     // Low score analysis
     const weakAttempts = list.filter(a => ((a.score ?? 0) / Math.max(a.total_questions, 1)) < 0.6);
     if (weakAttempts.length > 0) {
-      const subjectNames = [...new Set(weakAttempts.map(a => (a as any).quizzes?.subjects?.name).filter(Boolean))];
+      const subjectNames = [...new Set(weakAttempts.map(a => a.quizzes?.subjects?.name).filter(Boolean))];
       recs.push({
         type: 'improve',
         title: "Zaif mavzular aniqlandi",

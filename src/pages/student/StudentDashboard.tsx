@@ -14,12 +14,16 @@ import {
 } from 'lucide-react';
 import type { Subject, Quiz, ExamAttempt } from '@/types/types';
 
+interface AttemptWithQuiz extends ExamAttempt {
+  quizzes?: { title: string; duration_minutes: number };
+}
+
 export default function StudentDashboard() {
   const { profile } = useAuth();
   const navigate = useNavigate();
   const [subjects, setSubjects] = useState<Subject[]>([]);
   const [quizzes, setQuizzes] = useState<Quiz[]>([]);
-  const [attempts, setAttempts] = useState<ExamAttempt[]>([]);
+  const [attempts, setAttempts] = useState<AttemptWithQuiz[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -55,7 +59,7 @@ export default function StudentDashboard() {
     { label: "Fanlar", value: subjects.length, icon: BookOpen, color: 'text-primary', bg: 'bg-primary/10' },
     { label: "Imtihonlar", value: attempts.length, icon: ClipboardList, color: 'text-success', bg: 'bg-success/10' },
     { label: "O'rtacha ball", value: `${avgScore}%`, icon: Trophy, color: 'text-warning', bg: 'bg-warning/10' },
-    { label: "Progresss", value: `${Math.min(attempts.length * 10, 100)}%`, icon: TrendingUp, color: 'text-info', bg: 'bg-info/10' },
+    { label: "Progress", value: `${Math.min(attempts.length * 10, 100)}%`, icon: TrendingUp, color: 'text-info', bg: 'bg-info/10' },
   ];
 
   const subjectColors = ['bg-primary/10 text-primary', 'bg-success/10 text-success', 'bg-warning/10 text-warning', 'bg-destructive/10 text-destructive'];
@@ -160,7 +164,7 @@ export default function StudentDashboard() {
                       <div key={attempt.id} className="p-3 rounded-lg bg-muted/30 border border-border">
                         <div className="flex items-start justify-between gap-2 mb-2">
                           <p className="text-sm font-medium text-foreground text-pretty flex-1 min-w-0">
-                            {(attempt as any).quizzes?.title || 'Imtihon'}
+                            {attempt.quizzes?.title || 'Imtihon'}
                           </p>
                           <Badge variant={pct >= 70 ? 'default' : 'destructive'} className="shrink-0 text-xs">
                             {pct}%

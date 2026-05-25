@@ -14,11 +14,19 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { User, BookOpen, ClipboardList, TrendingUp, Calendar, Trophy, Award } from 'lucide-react';
 import type { Attendance, ExamAttempt } from '@/types/types';
 
+interface AttendanceWithSubject extends Attendance {
+  subjects?: { name: string };
+}
+
+interface AttemptWithQuiz extends ExamAttempt {
+  quizzes?: { title: string; subject_id: string; subjects?: { name: string } };
+}
+
 export default function StudentProfile() {
   const { profile, refreshProfile } = useAuth();
   const navigate = useNavigate();
-  const [attendance, setAttendance] = useState<Attendance[]>([]);
-  const [attempts, setAttempts] = useState<ExamAttempt[]>([]);
+  const [attendance, setAttendance] = useState<AttendanceWithSubject[]>([]);
+  const [attempts, setAttempts] = useState<AttemptWithQuiz[]>([]);
   const [subjectCount, setSubjectCount] = useState(0);
   const [loading, setLoading] = useState(true);
 
@@ -170,7 +178,7 @@ export default function StudentProfile() {
                           const g = p >= 90 ? "A'lo" : p >= 75 ? 'Yaxshi' : p >= 55 ? 'Qoniqarli' : 'Qoniqarsiz';
                           return (
                             <TableRow key={a.id} className="cursor-pointer hover:bg-muted/30" onClick={() => navigate(`/exams/result/${a.id}`)}>
-                              <TableCell className="whitespace-nowrap font-medium">{(a as any).quizzes?.title || 'Test'}</TableCell>
+                              <TableCell className="whitespace-nowrap font-medium">{a.quizzes?.title || 'Test'}</TableCell>
                               <TableCell className="whitespace-nowrap text-right">{a.score}/{a.total_questions}</TableCell>
                               <TableCell className="whitespace-nowrap text-right">{p}%</TableCell>
                               <TableCell className="whitespace-nowrap">
@@ -227,7 +235,7 @@ export default function StudentProfile() {
                                 {new Date(a.date).toLocaleDateString('uz-UZ')}
                               </TableCell>
                               <TableCell className="whitespace-nowrap">
-                                {(a as any).subjects?.name || '—'}
+                                {a.subjects?.name || '—'}
                               </TableCell>
                               <TableCell className="whitespace-nowrap">
                                 <Badge className={`text-xs ${s.className}`}>{s.label}</Badge>

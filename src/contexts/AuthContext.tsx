@@ -45,30 +45,18 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   useEffect(() => {
-    // eslint-disable-next-line no-console
-    console.log("[AuthProvider] initializing...");
     supabase.auth
       .getSession()
       .then(({ data: { session } }) => {
-        // eslint-disable-next-line no-console
-        console.log("[AuthProvider] session:", session ? "found" : "none");
         setUser(session?.user ?? null);
         if (session?.user) {
-          getProfile(session.user.id).then((p) => {
-            // eslint-disable-next-line no-console
-            console.log("[AuthProvider] profile loaded:", p ? p.role : "null");
-            setProfile(p);
-          });
+          getProfile(session.user.id).then(setProfile);
         }
       })
-      .catch((error) => {
-        // eslint-disable-next-line no-console
-        console.error("[AuthProvider] getSession error:", error);
+      .catch((error: Error) => {
         toast.error(`Session error: ${error.message}`);
       })
       .finally(() => {
-        // eslint-disable-next-line no-console
-        console.log("[AuthProvider] loading complete");
         setLoading(false);
       });
 
@@ -89,7 +77,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const signIn = async (username: string, password: string) => {
     try {
-      const email = `${username}@miaoda.com`;
+      const email = `${username}@eduai.internal`;
       const { error } = await supabase.auth.signInWithPassword({ email, password });
       if (error) throw error;
       return { error: null };
@@ -110,7 +98,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       if (data?.error) throw new Error(data.error);
 
       // Sign in after successful registration
-      const email = `${username}@miaoda.com`;
+      const email = `${username}@eduai.internal`;
       const { error: signInError } = await supabase.auth.signInWithPassword({ email, password });
       if (signInError) throw signInError;
 
