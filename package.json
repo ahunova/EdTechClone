@@ -4,7 +4,7 @@
   "type": "module",
   "scripts": {
     "dev": "echo 'Do not use this command, only use lint to check'",
-    "build": "echo 'Do not use this command, only use lint to check'",
+    "build": "vite build --config vite.config.ts",
     "lint": "tsgo -p tsconfig.check.json; node_modules/.bin/biome lint; .rules/check.sh; mkdir -p node_modules/.tmp; npx tailwindcss -i ./src/index.css -o node_modules/.tmp/.tw-check 2>&1 | grep -E '^(CssSyntaxError|Error):.*' || true; .rules/testBuild.sh",
     "app": "vite --config vite.config.ts",
     "functions": "supabase functions serve",
